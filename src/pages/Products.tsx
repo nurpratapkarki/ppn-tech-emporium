@@ -1,15 +1,20 @@
-
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
-import { Search, Filter, Star, ShoppingCart } from 'lucide-react';
+import { Search, Filter, Star, ShoppingCart, Eye } from 'lucide-react';
+import { useCart } from '@/contexts/CartContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { toast } from 'sonner';
 
 export default function Products() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const { addToCart } = useCart();
+  const { user } = useAuth();
 
   const categories = [
     { value: 'all', label: 'All Products' },
@@ -108,6 +113,28 @@ export default function Products() {
       inStock: true
     }
   ];
+
+  const handleAddToCart = (product: any) => {
+    if (!user) {
+      toast.error('Please login to add items to cart');
+      return;
+    }
+
+    if (!product.inStock) {
+      toast.error('Product is out of stock');
+      return;
+    }
+
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      type: 'product'
+    });
+    
+    toast.success('Product added to cart!');
+  };
 
   const filteredProducts = products.filter(product => {
     const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
@@ -211,20 +238,28 @@ export default function Products() {
                   )}
                 </div>
                 
-                <Button 
-                  className="w-full" 
-                  disabled={!product.inStock}
-                  variant={product.inStock ? "default" : "secondary"}
-                >
-                  {product.inStock ? (
-                    <>
-                      <ShoppingCart className="w-4 h-4 mr-2" />
-                      Add to Cart
-                    </>
-                  ) : (
-                    'Notify When Available'
-                  )}
-                </Button>
+                <div className="flex gap-2">
+                  <Link to={`/products/${product.id}`} className="flex-1">
+                    <Button variant="outline" className="w-full">
+                      <Eye className="w-4 h-4 mr-2" />
+                      View Details
+                    </Button>
+                  </Link>
+                  <Button 
+                    className="flex-1" 
+                    disabled={!product.inStock}
+                    onClick={() => handleAddToCart(product)}
+                  >
+                    {product.inStock ? (
+                      <>
+                        <ShoppingCart className="w-4 h-4 mr-2" />
+                        Add to Cart
+                      </>
+                    ) : (
+                      'Out of Stock'
+                    )}
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>

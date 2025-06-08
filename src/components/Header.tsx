@@ -1,13 +1,23 @@
 
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ShoppingCart, Phone } from 'lucide-react';
+import { Menu, X, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from './ThemeToggle';
+import { LoginDialog } from './LoginDialog';
+import { CartDrawer } from './CartDrawer';
+import { useAuth } from '@/contexts/AuthContext';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { user, logout } = useAuth();
 
   const navigation = [
     { name: 'Home', href: '/' },
@@ -56,9 +66,26 @@ export function Header() {
               <Phone className="w-4 h-4 mr-2" />
               Call Us
             </Button>
-            <Button variant="ghost" size="sm">
-              <ShoppingCart className="w-4 h-4" />
-            </Button>
+            
+            <CartDrawer />
+            
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm">
+                    Welcome, {user.name}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={logout}>
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <LoginDialog />
+            )}
+            
             <ThemeToggle />
             
             {/* Mobile menu button */}
