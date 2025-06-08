@@ -81,7 +81,9 @@ export default function ServiceDetail() {
   const { addToCart } = useCart();
   const { user } = useAuth();
   
-  const service = serviceData[id as keyof typeof serviceData];
+  // Convert string id to number and safely access service data
+  const serviceId = Number(id);
+  const service = serviceData[serviceId as keyof typeof serviceData];
 
   if (!service) {
     return (

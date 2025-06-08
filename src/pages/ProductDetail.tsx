@@ -47,6 +47,7 @@ const productData = {
     name: 'Professional Business Laptop',
     category: 'computers',
     price: 899,
+    originalPrice: undefined, // Making this explicitly optional
     image: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=800',
     rating: 4.6,
     reviews: 89,
@@ -81,7 +82,9 @@ export default function ProductDetail() {
   const { addToCart } = useCart();
   const { user } = useAuth();
   
-  const product = productData[id as keyof typeof productData];
+  // Convert string id to number and safely access product data
+  const productId = Number(id);
+  const product = productData[productId as keyof typeof productData];
 
   if (!product) {
     return (
