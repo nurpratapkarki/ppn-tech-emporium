@@ -1,11 +1,10 @@
-
 import { useParams, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/contexts/AuthContext';
-import { ArrowLeft, Star, ShoppingCart, Check, X } from 'lucide-react';
+import { ArrowLeft, Star, ShoppingCart, Check, X, Phone } from 'lucide-react';
 import { toast } from 'sonner';
 
 const productData = {
@@ -90,6 +89,7 @@ export default function ProductDetail() {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
         <h1 className="text-2xl font-bold mb-4">Product Not Found</h1>
+        <p className="text-muted-foreground mb-6">The product you're looking for doesn't exist.</p>
         <Link to="/products">
           <Button>
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -131,7 +131,7 @@ export default function ProductDetail() {
             <img 
               src={product.image} 
               alt={product.name}
-              className="w-full h-96 object-cover"
+              className="w-full h-96 md:h-[500px] object-cover"
             />
             {product.badge && (
               <Badge className="absolute top-4 left-4 bg-accent">
@@ -139,9 +139,9 @@ export default function ProductDetail() {
               </Badge>
             )}
             {!product.inStock && (
-              <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                <Badge variant="destructive">Out of Stock</Badge>
-              </div>
+              <Badge variant="destructive" className="absolute top-4 right-4">
+                Out of Stock
+              </Badge>
             )}
           </div>
         </div>
@@ -149,24 +149,26 @@ export default function ProductDetail() {
         {/* Product Info */}
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
+            <h1 className="text-2xl md:text-3xl font-bold mb-2">{product.name}</h1>
             <div className="flex items-center space-x-4 mb-4">
               <div className="flex text-yellow-400">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className={`w-5 h-5 ${i < Math.floor(product.rating) ? 'fill-current' : ''}`} />
                 ))}
               </div>
-              <span className="text-muted-foreground">
+              <span className="text-muted-foreground text-sm md:text-base">
                 ({product.rating}) • {product.reviews} reviews
               </span>
             </div>
             
-            <div className="flex items-center space-x-4 mb-6">
-              <span className="text-3xl font-bold text-primary">${product.price}</span>
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="text-2xl md:text-3xl font-bold text-primary">
+                ${product.price}
+              </div>
               {product.originalPrice && (
-                <span className="text-xl text-muted-foreground line-through">
+                <div className="text-lg text-muted-foreground line-through">
                   ${product.originalPrice}
-                </span>
+                </div>
               )}
               {product.originalPrice && (
                 <Badge variant="secondary">
@@ -175,7 +177,7 @@ export default function ProductDetail() {
               )}
             </div>
 
-            <p className="text-muted-foreground mb-6">{product.description}</p>
+            <p className="text-muted-foreground mb-6 text-sm md:text-base">{product.description}</p>
           </div>
 
           <div className="space-y-4">
@@ -185,29 +187,14 @@ export default function ProductDetail() {
               onClick={handleAddToCart}
               disabled={!product.inStock}
             >
-              {product.inStock ? (
-                <>
-                  <ShoppingCart className="w-5 h-5 mr-2" />
-                  {user ? 'Add to Cart' : 'Login to Add to Cart'}
-                </>
-              ) : (
-                'Out of Stock'
-              )}
+              <ShoppingCart className="w-5 h-5 mr-2" />
+              {!product.inStock ? 'Out of Stock' : user ? 'Add to Cart' : 'Login to Purchase'}
             </Button>
             
-            <div className="flex items-center space-x-2 text-sm">
-              {product.inStock ? (
-                <>
-                  <Check className="w-4 h-4 text-green-500" />
-                  <span className="text-green-500">In Stock</span>
-                </>
-              ) : (
-                <>
-                  <X className="w-4 h-4 text-red-500" />
-                  <span className="text-red-500">Out of Stock</span>
-                </>
-              )}
-            </div>
+            <Button variant="outline" size="lg" className="w-full">
+              <Phone className="w-5 h-5 mr-2" />
+              Call for Support
+            </Button>
           </div>
         </div>
       </div>
@@ -215,13 +202,15 @@ export default function ProductDetail() {
       {/* Product Details */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <Card>
-          <CardContent className="p-6">
-            <h3 className="text-xl font-semibold mb-4">Key Features</h3>
-            <ul className="space-y-2">
+          <CardHeader>
+            <CardTitle>Features</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-3">
               {product.features.map((feature, index) => (
                 <li key={index} className="flex items-start space-x-2">
                   <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                  <span>{feature}</span>
+                  <span className="text-sm md:text-base">{feature}</span>
                 </li>
               ))}
             </ul>
@@ -229,13 +218,15 @@ export default function ProductDetail() {
         </Card>
 
         <Card>
-          <CardContent className="p-6">
-            <h3 className="text-xl font-semibold mb-4">Specifications</h3>
+          <CardHeader>
+            <CardTitle>Specifications</CardTitle>
+          </CardHeader>
+          <CardContent>
             <div className="space-y-3">
               {Object.entries(product.specifications).map(([key, value]) => (
-                <div key={key} className="flex justify-between items-center py-2 border-b border-border/50 last:border-b-0">
-                  <span className="font-medium">{key}</span>
-                  <span className="text-muted-foreground">{value}</span>
+                <div key={key} className="flex justify-between py-2 border-b border-border/50 last:border-0">
+                  <span className="font-medium text-sm md:text-base">{key}</span>
+                  <span className="text-muted-foreground text-sm md:text-base">{value}</span>
                 </div>
               ))}
             </div>

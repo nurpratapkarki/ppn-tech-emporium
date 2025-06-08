@@ -73,6 +73,71 @@ const serviceData = {
     duration: '4-6 hours',
     location: 'On-site only',
     warranty: '6 months'
+  },
+  3: {
+    id: 3,
+    name: 'Printer Sales & Repair',
+    category: 'repair',
+    price: 49,
+    image: 'https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=800',
+    rating: 4.7,
+    reviews: 124,
+    badge: 'Quick Service',
+    available: true,
+    description: 'Professional printer repair services and sales of new printers. We handle all major brands and types including inkjet, laser, and multifunction printers.',
+    features: [
+      'All brand printer repair',
+      'New printer sales',
+      'Ink and toner replacement',
+      'Print head cleaning',
+      'Driver installation',
+      'Network printer setup',
+      'Maintenance contracts',
+      'Same-day service available'
+    ],
+    includes: [
+      'Free diagnostic check',
+      'Cleaning and calibration',
+      '90-day repair warranty',
+      'Setup and testing',
+      'Basic user training'
+    ],
+    duration: '1-2 hours',
+    location: 'In-store or On-site',
+    warranty: '90 days'
+  },
+  4: {
+    id: 4,
+    name: 'Networking & Intercom Setup',
+    category: 'installation',
+    price: 199,
+    image: 'https://images.unsplash.com/photo-1606868306217-dbf5046868d2?w=800',
+    rating: 4.6,
+    reviews: 87,
+    badge: 'Enterprise',
+    available: true,
+    description: 'Complete networking and intercom system installation for homes and businesses. Includes WiFi setup, network security, and intercom configuration.',
+    features: [
+      'Network infrastructure setup',
+      'WiFi optimization',
+      'Intercom system installation',
+      'Network security configuration',
+      'Cable management',
+      'Access point installation',
+      'Remote monitoring setup',
+      'Performance testing'
+    ],
+    includes: [
+      'Network assessment',
+      'Professional installation',
+      'Security configuration',
+      'User documentation',
+      '6-month support',
+      'Performance optimization'
+    ],
+    duration: '3-5 hours',
+    location: 'On-site only',
+    warranty: '1 year'
   }
 };
 
@@ -89,6 +154,7 @@ export default function ServiceDetail() {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
         <h1 className="text-2xl font-bold mb-4">Service Not Found</h1>
+        <p className="text-muted-foreground mb-6">The service you're looking for doesn't exist.</p>
         <Link to="/services">
           <Button>
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -143,44 +209,44 @@ export default function ServiceDetail() {
         {/* Service Info */}
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold mb-2">{service.name}</h1>
+            <h1 className="text-2xl md:text-3xl font-bold mb-2">{service.name}</h1>
             <div className="flex items-center space-x-4 mb-4">
               <div className="flex text-yellow-400">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className={`w-5 h-5 ${i < Math.floor(service.rating) ? 'fill-current' : ''}`} />
                 ))}
               </div>
-              <span className="text-muted-foreground">
+              <span className="text-muted-foreground text-sm md:text-base">
                 ({service.rating}) • {service.reviews} reviews
               </span>
             </div>
             
-            <div className="text-3xl font-bold text-primary mb-6">
+            <div className="text-2xl md:text-3xl font-bold text-primary mb-6">
               Starting at ${service.price}
             </div>
 
-            <p className="text-muted-foreground mb-6">{service.description}</p>
+            <p className="text-muted-foreground mb-6 text-sm md:text-base">{service.description}</p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <div className="flex items-center space-x-2">
-                <Clock className="w-5 h-5 text-primary" />
+                <Clock className="w-5 h-5 text-primary flex-shrink-0" />
                 <div>
-                  <div className="font-medium">Duration</div>
-                  <div className="text-sm text-muted-foreground">{service.duration}</div>
+                  <div className="font-medium text-sm md:text-base">Duration</div>
+                  <div className="text-xs md:text-sm text-muted-foreground">{service.duration}</div>
                 </div>
               </div>
               <div className="flex items-center space-x-2">
-                <MapPin className="w-5 h-5 text-primary" />
+                <MapPin className="w-5 h-5 text-primary flex-shrink-0" />
                 <div>
-                  <div className="font-medium">Location</div>
-                  <div className="text-sm text-muted-foreground">{service.location}</div>
+                  <div className="font-medium text-sm md:text-base">Location</div>
+                  <div className="text-xs md:text-sm text-muted-foreground">{service.location}</div>
                 </div>
               </div>
               <div className="flex items-center space-x-2">
-                <Check className="w-5 h-5 text-primary" />
+                <Check className="w-5 h-5 text-primary flex-shrink-0" />
                 <div>
-                  <div className="font-medium">Warranty</div>
-                  <div className="text-sm text-muted-foreground">{service.warranty}</div>
+                  <div className="font-medium text-sm md:text-base">Warranty</div>
+                  <div className="text-xs md:text-sm text-muted-foreground">{service.warranty}</div>
                 </div>
               </div>
             </div>
@@ -216,7 +282,7 @@ export default function ServiceDetail() {
               {service.features.map((feature, index) => (
                 <li key={index} className="flex items-start space-x-2">
                   <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                  <span>{feature}</span>
+                  <span className="text-sm md:text-base">{feature}</span>
                 </li>
               ))}
             </ul>
@@ -232,7 +298,7 @@ export default function ServiceDetail() {
               {service.includes.map((item, index) => (
                 <li key={index} className="flex items-start space-x-2">
                   <Check className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                  <span>{item}</span>
+                  <span className="text-sm md:text-base">{item}</span>
                 </li>
               ))}
             </ul>

@@ -5,6 +5,17 @@ interface User {
   id: string;
   email: string;
   name: string;
+  phone?: string;
+  address?: string;
+}
+
+interface UpdateProfileData {
+  name: string;
+  email: string;
+  phone?: string;
+  address?: string;
+  currentPassword?: string;
+  newPassword?: string;
 }
 
 interface AuthContextType {
@@ -12,6 +23,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<boolean>;
   register: (name: string, email: string, password: string) => Promise<boolean>;
   logout: () => void;
+  updateProfile: (data: UpdateProfileData) => Promise<boolean>;
   isLoading: boolean;
 }
 
@@ -39,7 +51,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const mockUser = {
         id: '1',
         email,
-        name: email.split('@')[0]
+        name: email.split('@')[0],
+        phone: '',
+        address: ''
       };
       
       setUser(mockUser);
@@ -60,7 +74,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const mockUser = {
         id: Date.now().toString(),
         email,
-        name
+        name,
+        phone: '',
+        address: ''
       };
       
       setUser(mockUser);
@@ -73,13 +89,50 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return false;
   };
 
+  const updateProfile = async (data: UpdateProfileData): Promise<boolean> => {
+    // Simulate API call - replace with actual Django backend call later
+    setIsLoading(true);
+    
+    try {
+      if (!user) {
+        setIsLoading(false);
+        return false;
+      }
+
+      // In a real app, you would validate the current password here
+      if (data.currentPassword && data.newPassword) {
+        // Mock password validation
+        if (data.currentPassword.length < 6) {
+          setIsLoading(false);
+          return false;
+        }
+      }
+
+      const updatedUser = {
+        ...user,
+        name: data.name,
+        email: data.email,
+        phone: data.phone || '',
+        address: data.address || ''
+      };
+      
+      setUser(updatedUser);
+      localStorage.setItem('ppn_user', JSON.stringify(updatedUser));
+      setIsLoading(false);
+      return true;
+    } catch (error) {
+      setIsLoading(false);
+      return false;
+    }
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem('ppn_user');
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, login, register, logout, updateProfile, isLoading }}>
       {children}
     </AuthContext.Provider>
   );
