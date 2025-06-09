@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Phone, User } from 'lucide-react';
+import { Menu, X, Phone, User, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from './ThemeToggle';
 import { LoginDialog } from './LoginDialog';
@@ -79,24 +79,33 @@ export function Header() {
             <CartDrawer />
             
             {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+              <>
+                <Link to="/orders">
                   <Button variant="ghost" size="sm" className="flex items-center space-x-2">
-                    <User className="w-4 h-4" />
-                    <span className="hidden md:inline">Welcome, {user.name.split(' ')[0]}</span>
+                    <Package className="w-4 h-4" />
+                    <span className="hidden md:inline">Orders</span>
                   </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem onClick={() => setIsProfileOpen(true)}>
-                    <User className="w-4 h-4 mr-2" />
-                    Profile Settings
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout}>
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                </Link>
+                
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="flex items-center space-x-2">
+                      <User className="w-4 h-4" />
+                      <span className="hidden md:inline">Welcome, {user.name.split(' ')[0]}</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem onClick={() => setIsProfileOpen(true)}>
+                      <User className="w-4 h-4 mr-2" />
+                      Profile Settings
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleLogout}>
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
             ) : (
               <LoginDialog />
             )}
@@ -137,6 +146,12 @@ export function Header() {
               </Button>
               {user && (
                 <div className="pt-4 border-t">
+                  <Link to="/orders" onClick={() => setIsMenuOpen(false)}>
+                    <Button variant="outline" size="sm" className="w-full mb-2">
+                      <Package className="w-4 h-4 mr-2" />
+                      My Orders
+                    </Button>
+                  </Link>
                   <Button 
                     variant="outline" 
                     size="sm" 
