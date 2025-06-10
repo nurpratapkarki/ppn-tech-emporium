@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { OrderCard } from '@/components/OrderCard';
 import { OrderStats } from '@/components/OrderStats';
 import { Loader2, Package } from 'lucide-react';
+import { Order } from '@/types/order';
 
 const OrderTracking = () => {
   const { user } = useAuth();
@@ -30,7 +31,7 @@ const OrderTracking = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data || [];
+      return (data || []) as Order[];
     },
     enabled: !!user?.id,
   });

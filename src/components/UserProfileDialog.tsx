@@ -22,10 +22,10 @@ export function UserProfileDialog({ open, onOpenChange }: UserProfileDialogProps
   const { user, updateProfile } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    name: user?.name || '',
+    full_name: user?.full_name || '',
     email: user?.email || '',
     phone: user?.phone || '',
-    address: user?.address || '',
+    address: typeof user?.address === 'string' ? user.address : '',
     currentPassword: '',
     newPassword: '',
     confirmPassword: '',
@@ -40,7 +40,7 @@ export function UserProfileDialog({ open, onOpenChange }: UserProfileDialogProps
     
     try {
       // Validate required fields
-      if (!formData.name || !formData.email) {
+      if (!formData.full_name || !formData.email) {
         toast.error('Name and email are required');
         return;
       }
@@ -63,7 +63,7 @@ export function UserProfileDialog({ open, onOpenChange }: UserProfileDialogProps
 
       // Update profile
       await updateProfile({
-        name: formData.name,
+        full_name: formData.full_name,
         email: formData.email,
         phone: formData.phone,
         address: formData.address,
@@ -107,12 +107,12 @@ export function UserProfileDialog({ open, onOpenChange }: UserProfileDialogProps
             <h3 className="text-lg font-medium">Personal Information</h3>
             
             <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
+              <Label htmlFor="full_name">Full Name</Label>
               <Input
-                id="name"
+                id="full_name"
                 type="text"
-                value={formData.name}
-                onChange={(e) => handleInputChange('name', e.target.value)}
+                value={formData.full_name}
+                onChange={(e) => handleInputChange('full_name', e.target.value)}
                 placeholder="Enter your full name"
               />
             </div>

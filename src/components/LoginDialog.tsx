@@ -22,12 +22,11 @@ export function LoginDialog() {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
 
-    const success = await login(email, password);
-    
-    if (success) {
+    try {
+      await login(email, password);
       toast.success('Login successful!');
       setIsOpen(false);
-    } else {
+    } catch (error) {
       toast.error('Invalid credentials. Please try again.');
     }
     
@@ -43,12 +42,11 @@ export function LoginDialog() {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
 
-    const success = await register(name, email, password);
-    
-    if (success) {
+    try {
+      await register(name, email, password);
       toast.success('Registration successful!');
       setIsOpen(false);
-    } else {
+    } catch (error) {
       toast.error('Registration failed. Please check your details.');
     }
     
