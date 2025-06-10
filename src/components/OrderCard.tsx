@@ -7,33 +7,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { OrderStatusTimeline } from './OrderStatusTimeline';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { format } from 'date-fns';
-
-interface OrderItem {
-  id: string;
-  quantity: number;
-  price: number;
-  products?: {
-    name: string;
-    price: number;
-    image_url?: string;
-  };
-  services?: {
-    name: string;
-    price: number;
-    image_url?: string;
-  };
-}
-
-interface Order {
-  id: string;
-  status: string;
-  total_amount: number;
-  payment_status: string;
-  created_at: string;
-  updated_at: string;
-  notes?: string;
-  order_items: OrderItem[];
-}
+import { Order } from '@/types/order';
 
 interface OrderCardProps {
   order: Order;
@@ -60,7 +34,7 @@ const getStatusColor = (status: string) => {
 
 const getPaymentStatusColor = (status: string) => {
   switch (status) {
-    case 'paid':
+    case 'completed':
       return 'bg-green-100 text-green-800 border-green-200';
     case 'pending':
       return 'bg-yellow-100 text-yellow-800 border-yellow-200';
@@ -81,7 +55,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>
-            <CardTitle className="text-lg">Order #{order.id.slice(0, 8)}</CardTitle>
+            <CardTitle className="text-lg">Order #{order.order_number}</CardTitle>
             <CardDescription>
               Placed on {format(new Date(order.created_at), 'PPP')}
             </CardDescription>
@@ -129,22 +103,22 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
                     return (
                       <div key={item.id} className="flex justify-between items-center">
                         <div className="flex items-center space-x-3">
-                          {itemData.image_url && (
+                          {itemData.thumbnail_url && (
                             <img 
-                              src={itemData.image_url} 
+                              src={itemData.thumbnail_url} 
                               alt={itemData.name}
                               className="w-12 h-12 object-cover rounded"
                             />
                           )}
                           <div>
-                            <p className="font-medium">{itemData.name}</p>
+                            <p className="font-medium">{item.name}</p>
                             <p className="text-sm text-muted-foreground">
                               Quantity: {item.quantity}
                             </p>
                           </div>
                         </div>
                         <span className="font-semibold">
-                          ${Number(item.price).toFixed(2)}
+                          ${Number(item.total_price).toFixed(2)}
                         </span>
                       </div>
                     );
