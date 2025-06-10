@@ -3,9 +3,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { OrderStatusTimeline } from '@/components/OrderStatusTimeline';
+import { Card, CardContent } from '@/components/ui/card';
 import { OrderCard } from '@/components/OrderCard';
 import { OrderStats } from '@/components/OrderStats';
 import { Loader2, Package } from 'lucide-react';
@@ -24,8 +22,8 @@ const OrderTracking = () => {
           *,
           order_items (
             *,
-            products (name, price, image_url),
-            services (name, price, image_url)
+            products (name, price, thumbnail_url),
+            services (name, price, thumbnail_url)
           )
         `)
         .eq('user_id', user.id)

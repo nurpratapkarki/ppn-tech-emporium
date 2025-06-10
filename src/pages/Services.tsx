@@ -11,52 +11,52 @@ const services = [
     name: 'Computer Repair & Diagnostics',
     category: 'repair',
     price: 89,
-    image: 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=500',
+    thumbnail_url: 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=500',
     rating: 4.9,
-    reviews: 156,
+    rating_count: 156,
     badge: 'Most Popular',
-    duration: '2-4 hours',
+    duration_minutes: 240,
     location: 'In-store or On-site',
-    description: 'Professional computer repair and diagnostic services for all types of issues.'
+    short_description: 'Professional computer repair and diagnostic services for all types of issues.'
   },
   {
     id: 2,
     name: 'CCTV Installation & Setup',
     category: 'installation',
     price: 299,
-    image: 'https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=500',
+    thumbnail_url: 'https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=500',
     rating: 4.8,
-    reviews: 98,
+    rating_count: 98,
     badge: 'Professional',
-    duration: '4-6 hours',
+    duration_minutes: 360,
     location: 'On-site only',
-    description: 'Complete CCTV security system installation and configuration.'
+    short_description: 'Complete CCTV security system installation and configuration.'
   },
   {
     id: 3,
     name: 'Printer Sales & Repair',
     category: 'repair',
     price: 49,
-    image: 'https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=500',
+    thumbnail_url: 'https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=500',
     rating: 4.7,
-    reviews: 124,
+    rating_count: 124,
     badge: 'Quick Service',
-    duration: '1-2 hours',
+    duration_minutes: 120,
     location: 'In-store or On-site',
-    description: 'Professional printer repair services and sales of new printers.'
+    short_description: 'Professional printer repair services and sales of new printers.'
   },
   {
     id: 4,
     name: 'Networking & Intercom Setup',
     category: 'installation',
     price: 199,
-    image: 'https://images.unsplash.com/photo-1606868306217-dbf5046868d2?w=500',
+    thumbnail_url: 'https://images.unsplash.com/photo-1606868306217-dbf5046868d2?w=500',
     rating: 4.6,
-    reviews: 87,
+    rating_count: 87,
     badge: 'Enterprise',
-    duration: '3-5 hours',
+    duration_minutes: 300,
     location: 'On-site only',
-    description: 'Complete networking and intercom system installation.'
+    short_description: 'Complete networking and intercom system installation.'
   }
 ];
 
@@ -78,7 +78,7 @@ export default function Services() {
           <Card key={service.id} className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
             <div className="relative overflow-hidden rounded-t-lg">
               <img 
-                src={service.image} 
+                src={service.thumbnail_url} 
                 alt={service.name}
                 className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
               />
@@ -100,20 +100,20 @@ export default function Services() {
                   ))}
                 </div>
                 <span className="text-sm text-muted-foreground">
-                  ({service.rating}) • {service.reviews} reviews
+                  ({service.rating}) • {service.rating_count} reviews
                 </span>
               </div>
             </CardHeader>
             
             <CardContent className="space-y-4">
               <p className="text-sm text-muted-foreground line-clamp-2">
-                {service.description}
+                {service.short_description}
               </p>
               
               <div className="space-y-2">
                 <div className="flex items-center text-sm text-muted-foreground">
                   <Clock className="w-4 h-4 mr-2 flex-shrink-0" />
-                  <span>{service.duration}</span>
+                  <span>{Math.floor(service.duration_minutes / 60)}-{Math.ceil(service.duration_minutes / 60)} hours</span>
                 </div>
                 <div className="flex items-center text-sm text-muted-foreground">
                   <MapPin className="w-4 h-4 mr-2 flex-shrink-0" />
